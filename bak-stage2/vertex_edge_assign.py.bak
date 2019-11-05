@@ -1,10 +1,4 @@
 from __future__ import print_function
-from __future__ import division
-from builtins import map
-from builtins import input
-from builtins import str
-from builtins import range
-from past.utils import old_div
 import os
 import itertools
 import numpy as np
@@ -35,7 +29,7 @@ def vertex_assign(TG, TVT, node_cns, unit_cell, cn1, USNA, SYM_TOL, ALL_NODE_COM
 				print('select building block for:', name , '(CN=' + str(cn) + ')')
 				for c in range(len(node_dict[k])):
 					print(c, node_dict[k][c])
-				cif_index = int(input('enter the index of the desired cif: \n'))
+				cif_index = int(raw_input('enter the index of the desired cif: \n'))
 				choice_dict[k] = node_dict[k][cif_index]
 				print('???????????????????????????????????')
 				print('')
@@ -98,8 +92,8 @@ def vertex_assign(TG, TVT, node_cns, unit_cell, cn1, USNA, SYM_TOL, ALL_NODE_COM
 				if ndict['type'] == k[1]:
 					for cif in node_dict[k]:
 
-						nvec = np.array([old_div(v,np.linalg.norm(v)) for v in node_vecs(name, TG, unit_cell, False)])
-						bbxvec = np.array([old_div(v,np.linalg.norm(v)) for v in X_vecs(cif, 'nodes', False)])
+						nvec = np.array([v/np.linalg.norm(v) for v in node_vecs(name, TG, unit_cell, False)])
+						bbxvec = np.array([v/np.linalg.norm(v) for v in X_vecs(cif, 'nodes', False)])
 						rmsd,rot,tran = superimpose(bbxvec,nvec)
 						aff_b = np.dot(bbxvec,rot) + tran
 						distances_append((rmsd,cif))
@@ -168,7 +162,7 @@ def assign_node_vecs2edges(TG, unit_cell, SYM_TOL):
 			if mag > ll:
 				ll = mag
 
-		nodvec = np.array([mag * (old_div(l[1],np.linalg.norm(l[1]))) for l in nod])
+		nodvec = np.array([mag * (l[1]/np.linalg.norm(l[1])) for l in nod])
 
 		rmsd,rot,tran = superimpose(bbxvec, nodvec)
 
@@ -181,7 +175,7 @@ def assign_node_vecs2edges(TG, unit_cell, SYM_TOL):
 		asd_append = asd.append
 		for v1 in laff_b:
 			smallest_dist = (1.0E6, 'foo', 'bar')
-			v1vec = list(map(float, v1[1:]))
+			v1vec = map(float, v1[1:])
 			mag = np.linalg.norm(v1vec)
 			for v2 in lnodvec:
 				dist = np.linalg.norm(v1vec - v2[1:])

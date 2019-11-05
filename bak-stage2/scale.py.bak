@@ -1,9 +1,4 @@
 from __future__ import print_function
-from __future__ import division
-from builtins import zip
-from builtins import str
-from builtins import range
-from past.utils import old_div
 import numpy as np
 from scipy.optimize import minimize, basinhopping
 import random
@@ -12,9 +7,9 @@ pi = np.pi
 
 def metric_tensor(l):
 	a,b,c,alpha,beta,gamma = l
-	Z = np.array([[a*a, a*b*np.cos(gamma * (old_div(pi,180))), a*c*np.cos(beta * (old_div(pi,180)))],
-			      [a*b*np.cos(gamma * (old_div(pi,180))), b*b, b*c*np.cos(alpha * (old_div(pi,180)))],
-			  	  [a*c*np.cos(beta * (old_div(pi,180))), b*c*np.cos(alpha * (old_div(pi,180))), c*c]])
+	Z = np.array([[a*a, a*b*np.cos(gamma * (pi/180)), a*c*np.cos(beta * (pi/180))],
+			      [a*b*np.cos(gamma * (pi/180)), b*b, b*c*np.cos(alpha * (pi/180))],
+			  	  [a*c*np.cos(beta * (pi/180)), b*c*np.cos(alpha * (pi/180)), c*c]])
 	return Z
 
 def objective(V, ncra, ncca, Alpha, ne, nv, Bstar_inv, SBU_IP):
@@ -49,7 +44,7 @@ def scale(all_SBU_coords,a,b,c,ang_alpha,ang_beta,ang_gamma,max_le,num_vertices,
 	if PRE_SCALE == 'none':
 		scale_guess = 1.0
 	else:
-		scale_guess = (old_div(max_length, max_le)) * PRE_SCALE
+		scale_guess = (max_length / max_le) * PRE_SCALE
 
 	all_SBU_ip = []
 	all_SBU_ip_append = all_SBU_ip.append
@@ -131,9 +126,9 @@ def scale(all_SBU_coords,a,b,c,ang_alpha,ang_beta,ang_gamma,max_le,num_vertices,
 		sc_a,sc_b,sc_c,sc_alpha,sc_beta,sc_gamma = init_variables[0:6]
 		sc_covar = init_variables[6:].reshape(ncra,ncca)
 
-	ab = [old_div(a,b), old_div(sc_a,sc_b)]
-	ac = [old_div(a,c), old_div(sc_a,sc_c)]
-	bc = [old_div(b,c), old_div(sc_b,sc_c)]
+	ab = [a/b, sc_a/sc_b]
+	ac = [a/c, sc_a/sc_c]
+	bc = [b/c, sc_b/sc_c]
 	alpha = [ang_alpha, sc_alpha]
 	beta = [ang_beta, sc_beta]
 	gamma = [ang_gamma, sc_gamma]

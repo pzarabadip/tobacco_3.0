@@ -1,7 +1,3 @@
-from __future__ import division
-from builtins import str
-from builtins import range
-from past.utils import old_div
 import numpy as np
 import networkx as nx
 import math
@@ -50,7 +46,7 @@ def scaling_callback_animation(callbackresults, alpha, Bstar_inv, ncra, ncca, nu
 		by_rc = rc_b * np.sin(rc_gamma * pi/180.0)
 		bz_rc = 0.0
 		cx_rc = rc_c * np.cos(rc_beta * pi/180.0)
-		cy_rc = old_div((rc_c * rc_b * np.cos(rc_alpha * pi/180.0) - bx_rc * cx_rc), by_rc)
+		cy_rc = (rc_c * rc_b * np.cos(rc_alpha * pi/180.0) - bx_rc * cx_rc) / by_rc
 		cz_rc = (rc_c ** 2.0 - cx_rc ** 2.0 - cy_rc ** 2.0) ** 0.5
 		rc_unit_cell = np.asarray([[ax_rc,ay_rc,az_rc],[bx_rc,by_rc,bz_rc],[cx_rc,cy_rc,cz_rc]]).T
 
@@ -210,14 +206,14 @@ def animate_objective_minimization(callbackresults, prefix, bitrate=1800, fps=30
 		fX_vals.append(fX)
 		res_vals.append(avg_res)
 
-	iterations = np.array(list(range(len(fX_vals))))
+	iterations = np.array(range(len(fX_vals)))
 	uc_params = np.asarray(uc_params)
-	fX_vals = old_div(np.asarray(fX_vals),max(fX_vals))
+	fX_vals = np.asarray(fX_vals)/max(fX_vals)
 	res_vals = np.asarray(res_vals)
 
 	nframes = len(iterations)
 	time *= 1000
-	delay = old_div(time,nframes)
+	delay = time/nframes
 
 	class SubplotAnimation(animation.TimedAnimation):
 		def __init__(self):
@@ -292,7 +288,7 @@ def animate_objective_minimization(callbackresults, prefix, bitrate=1800, fps=30
 								   self.line33]
 
 		def new_frame_seq(self):
-			return iter(list(range(self.t.size)))
+			return iter(range(self.t.size))
 
 		def _init_draw(self):
 			lines = [self.line11, self.line21, self.line22,

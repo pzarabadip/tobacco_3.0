@@ -1,5 +1,3 @@
-from __future__ import division
-from past.utils import old_div
 from bbcif_properties import X_vecs, calc_edge_len
 import numpy as np
 
@@ -38,7 +36,7 @@ def SBU_coords(augTG, ea_dict, csbl):
 				else:
 					total_length = dx_v + dx_ov + length + 2*csbl
 				
-				svec = (old_div(xvec,np.linalg.norm(xvec))) * total_length * direction
+				svec = (xvec/np.linalg.norm(xvec)) * total_length * direction
 				xvecs_append([ind, svec])
 
 		SBU_coords_append((vertex, xvecs))

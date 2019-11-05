@@ -1,6 +1,4 @@
 from __future__ import print_function
-from builtins import str
-from builtins import map
 import sys
 import os
 import re
@@ -67,7 +65,7 @@ def reindex(pathfile,charges):
 
 	with open(pathfile,'r') as cif:
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 
 	coords = []
 	coords_append = coords.append
@@ -142,7 +140,7 @@ def reindex(pathfile,charges):
 		for l in coords:
 			name = l[0]
 			elem = l[1]
-			vec = list(map(float,l[2:5]))
+			vec = map(float,l[2:5])
 
 			if charges:
 				charge = l[-1]

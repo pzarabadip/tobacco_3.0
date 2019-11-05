@@ -1,8 +1,3 @@
-from __future__ import print_function
-from builtins import zip
-from builtins import str
-from builtins import map
-from builtins import range
 import numpy as np
 import re
 import os
@@ -85,7 +80,7 @@ def write_check_cif(template, placed_nodes, placed_edges, g, sp, sc_unit_cell):
 	with open(tpath, 'r') as tcif:
 
 		tcif = tcif.read()
-		tcif = [_f for _f in tcif.split('\n') if _f]
+		tcif = filter(None, tcif.split('\n'))
 
 	cpath = os.path.join('check_cifs', str(g) + '_check_scaled_placed_' + template)
 
@@ -115,7 +110,7 @@ def write_check_cif(template, placed_nodes, placed_edges, g, sp, sc_unit_cell):
 					if name == 'X':
 						name = 'C'
 					index = name + str(q)
-					vec = np.array(list(map(float,[n[1],n[2],n[3]])))
+					vec = np.array(map(float,[n[1],n[2],n[3]]))
 					v = np.dot(np.linalg.inv(sc_unit_cell), vec)
 					check.write('{:>5}{:>5}{:>20}{:>20}{:>20}{:>12}{:>8}{:>8}'.format(index,name,v[0],v[1],v[2],'0.00000','Uiso','1.00'))
 					check.write('\n')
@@ -125,7 +120,7 @@ def write_check_cif(template, placed_nodes, placed_edges, g, sp, sc_unit_cell):
 					if name == 'X':
 						name = 'C'
 					index = name + str(q)
-					vec = np.array(list(map(float,[n[1],n[2],n[3]])))
+					vec = np.array(map(float,[n[1],n[2],n[3]]))
 					v = np.dot(np.linalg.inv(sc_unit_cell), vec)
 					check.write('{:>5}{:>5}{:>20}{:>20}{:>20}{:>12}{:>8}{:>8}'.format(index,name,v[0],v[1],v[2],'0.00000','Uiso','1.00'))
 					check.write('\n')
@@ -133,7 +128,7 @@ def write_check_cif(template, placed_nodes, placed_edges, g, sp, sc_unit_cell):
 
 def distance_search_bond(placed_all, bonds_all, sc_unit_cell, tol, trace_bond_making):
 
-	coords = np.array([np.dot(np.linalg.inv(sc_unit_cell), list(map(float, l[1:4]))) for l in placed_all])
+	coords = np.array([np.dot(np.linalg.inv(sc_unit_cell), map(float, l[1:4])) for l in placed_all])
 
 	fixed_bonds = []
 	used_bonds = []
@@ -149,15 +144,15 @@ def distance_search_bond(placed_all, bonds_all, sc_unit_cell, tol, trace_bond_ma
 			
 	for i in range(len(connection_points)):
 		if trace_bond_making:
-			print(i + 1, 'out of ', len(connection_points), 'connection_points have been bonded')
+			print i + 1, 'out of ', len(connection_points), 'connection_points have been bonded'
 		ielem = connection_points[i][0]
-		ivec = np.dot(np.linalg.inv(sc_unit_cell), list(map(float, connection_points[i][1:4])))
+		ivec = np.dot(np.linalg.inv(sc_unit_cell), map(float, connection_points[i][1:4]))
 		ibbid = int(connection_points[i][6])
 		for j in range(i + 1, len(connection_points)):
 			jelem = connection_points[j][0]
 			jbbid = int(connection_points[j][6])
 			if (ielem, jelem) not in used_bonds and (jelem, ielem) not in used_bonds:
-				jvec = np.dot(np.linalg.inv(sc_unit_cell),  list(map(float, connection_points[j][1:4])))
+				jvec = np.dot(np.linalg.inv(sc_unit_cell),  map(float, connection_points[j][1:4]))
 				
 				DV, sym = PBC3DF_sym(ivec,jvec)
 				dist = np.linalg.norm(np.dot(sc_unit_cell, DV))
@@ -181,7 +176,7 @@ def bond_connected_components(placed_all, bonds_all, sc_unit_cell, max_length, t
 	oanc_switch,oanc_dict = oanc
 
 	for n in placed_all:
-		G.add_node(n[0], coords=np.array(list(map(float,(n[1:4])))), occ=n[4], ty=re.sub('[0-9]','',n[5]), bbcode=int(n[6]), sacode=[])
+		G.add_node(n[0], coords=np.array(map(float,(n[1:4]))), occ=n[4], ty=re.sub('[0-9]','',n[5]), bbcode=int(n[6]), sacode=[])
 	for l in bonds_all:
 		G.add_edge(l[0], l[1], length=l[2], sym=l[3], ty=l[4], order=(l[0],l[1]))
 
@@ -197,12 +192,12 @@ def bond_connected_components(placed_all, bonds_all, sc_unit_cell, max_length, t
 	else:
 		bb_tol = max_length + max_length * (0.25)
 
-	print('distance search tolerance is', np.round(bb_tol,3), 'Angstroms')
+	print 'distance search tolerance is', np.round(bb_tol,3), 'Angstroms'
 
-	for i in range(len(ccs)):
+	for i in xrange(len(ccs)):
 
 		if trace_bond_making:
-			print(i, 'out of', len(ccs), 'building blocks have been bonded')
+			print i, 'out of', len(ccs), 'building blocks have been bonded'
 
 		cc1 = list(ccs[i])
 		xname1 = [n for n in cc1 if G.node[n]['ty'] == 'X']
@@ -219,7 +214,7 @@ def bond_connected_components(placed_all, bonds_all, sc_unit_cell, max_length, t
 			G.node[cc1[0]]['sacode'].append(1)
 			one_atom_nodes_append(cc1[0])
 		
-		for j in range(i+1, len(ccs)):
+		for j in xrange(i+1, len(ccs)):
 			cc2 = list(ccs[j])
 			xname2 = [n for n in cc2 if G.node[n]['ty'] == 'X']
 			NC2 = len(xname2)
@@ -352,7 +347,7 @@ def bond_connected_components(placed_all, bonds_all, sc_unit_cell, max_length, t
 
 def fix_bond_sym(bonds_all,placed_all,sc_unit_cell):
 	
-	coords_dict = dict((l[0],np.dot(np.linalg.inv(sc_unit_cell), list(map(float, l[1:4])))) for l in placed_all)
+	coords_dict = dict((l[0],np.dot(np.linalg.inv(sc_unit_cell), map(float, l[1:4]))) for l in placed_all)
 
 	fixed_bonds = []
 	fixed_bonds_append = fixed_bonds.append
@@ -398,7 +393,7 @@ def write_cif(placed_all, fixed_bonds, scaled_params, sc_unit_cell, cifname, cha
 			out.write('_atom_site_charge' + '\n')
 
 		for l in placed_all:
-			vec = list(map(float, l[1:4]))
+			vec = map(float, l[1:4])
 			cvec = np.dot(np.linalg.inv(sc_unit_cell), vec)
 			if charges:
 				out.write('{:7} {:>4} {:>15} {:>15} {:>15} {:>15}'.format(l[0], re.sub('[0-9]','',l[0]), "%.10f" % np.round(cvec[0],10), "%.10f" % np.round(cvec[1],10), "%.10f" % np.round(cvec[2],10), l[4]))

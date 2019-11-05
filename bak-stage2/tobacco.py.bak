@@ -1,9 +1,4 @@
 from __future__ import print_function
-from __future__ import division
-from builtins import zip
-from builtins import str
-from builtins import range
-from past.utils import old_div
 from reindex import apply_reindex
 from ciftemplate2graph import ct2g
 from vertex_edge_assign import vertex_assign, assign_node_vecs2edges
@@ -91,7 +86,7 @@ for template in sorted(os.listdir('templates')):
 	
 	TG, unit_cell, TVT, TET, TNAME, a, b, c, ang_alpha, ang_beta, ang_gamma, max_le = ct2g(template)
 	node_cns = [(cncalc(node, 'nodes', ONE_ATOM_NODE_CN), node) for node in os.listdir('nodes')]
-	edge_type_key = dict((list(TET)[k],k) for k in range(len(TET)))
+	edge_type_key = dict((list(TET)[k],k) for k in xrange(len(TET)))
 
 	print('Number of vertices = ', len(TG.nodes()))
 	print('Number of edges = ', len(TG.edges()))
@@ -253,7 +248,7 @@ for template in sorted(os.listdir('templates')):
 			by = sc_b * np.sin(sc_gamma * pi/180.0)
 			bz = 0.0
 			cx = sc_c * np.cos(sc_beta * pi/180.0)
-			cy = old_div((sc_c * sc_b * np.cos(sc_alpha * pi/180.0) - bx * cx), by)
+			cy = (sc_c * sc_b * np.cos(sc_alpha * pi/180.0) - bx * cx) / by
 			cz = (sc_c ** 2.0 - cx ** 2.0 - cy ** 2.0) ** 0.5
 			sc_unit_cell = np.asarray([[ax,ay,az],[bx,by,bz],[cx,cy,cz]]).T
 			

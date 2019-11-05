@@ -1,9 +1,3 @@
-from __future__ import print_function
-from __future__ import division
-from builtins import map
-from builtins import str
-from builtins import range
-from past.utils import old_div
 import numpy as np
 import networkx as nx
 import re
@@ -21,7 +15,7 @@ def omega2coords(augTG, sc_omega_plus, uc_params, num_vertices, template, g, CHE
 	by = sc_b * np.sin(sc_gamma * pi/180.0)
 	bz = 0.0
 	cx = sc_c * np.cos(sc_beta * pi/180.0)
-	cy = old_div((sc_c * sc_b * np.cos(sc_alpha * pi/180.0) - bx * cx), by)
+	cy = (sc_c * sc_b * np.cos(sc_alpha * pi/180.0) - bx * cx) / by
 	cz = (sc_c ** 2.0 - cx ** 2.0 - cy ** 2.0) ** 0.5
 	sc_unit_cell = np.asarray([[ax,ay,az],[bx,by,bz],[cx,cy,cz]]).T
 
@@ -30,7 +24,7 @@ def omega2coords(augTG, sc_omega_plus, uc_params, num_vertices, template, g, CHE
 	with open(path, 'r') as cif:
 
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 
 	discard_coords = []
 	discard_coords_append = discard_coords.append
@@ -39,7 +33,7 @@ def omega2coords(augTG, sc_omega_plus, uc_params, num_vertices, template, g, CHE
 		if isvert(s):
 			discard_coords_append(s)
 
-	start = np.asarray(list(map(float, discard_coords[0][2:5])))
+	start = np.asarray(map(float, discard_coords[0][2:5]))
 
 	shortest_path_dict = nx.shortest_path(augTG)
 	SN = sorted(augTG.nodes(), key = lambda x : int(re.sub('[A-Za-z]','',x)))
@@ -68,8 +62,8 @@ def omega2coords(augTG, sc_omega_plus, uc_params, num_vertices, template, g, CHE
 			elif (e,s) == positive_direction:
 				direction = -1
 			else:
-				print('Error in defining an edge traversal in omega_to_coords.py')
-				print('Exiting')
+				print 'Error in defining an edge traversal in omega_to_coords.py'
+				print 'Exiting'
 				sys.exit()
 			start = start + direction * sc_omega_plus[ind - 1]
 
@@ -100,7 +94,7 @@ def omega2coords(augTG, sc_omega_plus, uc_params, num_vertices, template, g, CHE
 	with open(path, 'r') as tcif:
 
 		tcif = tcif.read()
-		tcif = [_f for _f in tcif.split('\n') if _f]
+		tcif = filter(None, tcif.split('\n'))
 
 	if CHECK:
 

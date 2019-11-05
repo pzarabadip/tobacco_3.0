@@ -1,7 +1,4 @@
 from __future__ import print_function
-from __future__ import division
-from builtins import map
-from past.utils import old_div
 import re
 import sys
 import numpy as np
@@ -82,7 +79,7 @@ def bbelems(cifname, direc):
 
 	with open(path, 'r') as cif:
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 
 	elems = []
 	elems_append = elems.append
@@ -111,7 +108,7 @@ def bb2array(cifname, direc):
 
 	with open(path, 'r') as cif:
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 
 	fcoords = []
 	fcoords_append = fcoords.append
@@ -130,11 +127,11 @@ def bb2array(cifname, direc):
 		if '_cell_angle_gamma' in line:
 			gamma = s[1]
 		if iscoord(s):
-			fvec = np.array(list(map(float, s[2:5])))
+			fvec = np.array(map(float, s[2:5]))
 			fcoords_append([s[0],fvec])
 
 	pi = np.pi
-	a,b,c,alpha,beta,gamma = list(map(float, (a,b,c,alpha,beta,gamma)))
+	a,b,c,alpha,beta,gamma = map(float, (a,b,c,alpha,beta,gamma))
 	ax = a
 	ay = 0.0
 	az = 0.0
@@ -142,7 +139,7 @@ def bb2array(cifname, direc):
 	by = b * np.sin(gamma * pi / 180.0)
 	bz = 0.0
 	cx = c * np.cos(beta * pi / 180.0)
-	cy = old_div((c * b * np.cos(alpha * pi /180.0) - bx * cx), by)
+	cy = (c * b * np.cos(alpha * pi /180.0) - bx * cx) / by
 	cz = (c ** 2.0 - cx ** 2.0 - cy ** 2.0) ** 0.5
 	unit_cell = np.asarray([[ax,ay,az],[bx,by,bz],[cx,cy,cz]]).T
 	
@@ -160,7 +157,7 @@ def bbbonds(cifname, direc):
 
 	with open(path, 'r') as cif:
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 
 	bonds = []
 	bonds_append = bonds.append
@@ -177,7 +174,7 @@ def X_vecs(cifname, direc, label):
 
 	with open(path, 'r') as cif:
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 
 	fcoords = []
 	fcoords_append = fcoords.append
@@ -196,10 +193,10 @@ def X_vecs(cifname, direc, label):
 		if '_cell_angle_gamma' in line:
 			gamma = s[1]
 		if iscoord(s) and 'X' in s[0]:
-			fcoords_append([s[0],np.array(list(map(float, s[2:5])))])
+			fcoords_append([s[0],np.array(map(float, s[2:5]))])
 
 	pi = np.pi
-	a,b,c,alpha,beta,gamma = list(map(float, (a,b,c,alpha,beta,gamma)))
+	a,b,c,alpha,beta,gamma = map(float, (a,b,c,alpha,beta,gamma))
 	ax = a
 	ay = 0.0
 	az = 0.0
@@ -207,7 +204,7 @@ def X_vecs(cifname, direc, label):
 	by = b * np.sin(gamma * pi / 180.0)
 	bz = 0.0
 	cx = c * np.cos(beta * pi / 180.0)
-	cy = old_div((c * b * np.cos(alpha * pi /180.0) - bx * cx), by)
+	cy = (c * b * np.cos(alpha * pi /180.0) - bx * cx) / by
 	cz = (c ** 2.0 - cx ** 2.0 - cy ** 2.0) ** 0.5
 	unit_cell = np.asarray([[ax,ay,az],[bx,by,bz],[cx,cy,cz]]).T
 
@@ -230,7 +227,7 @@ def bbcharges(cifname, direc):
 
 	with open(path, 'r') as cif:
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 
 	charges = []
 	charges_append = charges.append
@@ -250,7 +247,7 @@ def calc_edge_len(cifname, direc):
 
 	with open(path, 'r') as cif:
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 
 	fcoords = []
 	fcoords_append = fcoords.append
@@ -269,10 +266,10 @@ def calc_edge_len(cifname, direc):
 		if '_cell_angle_gamma' in line:
 			gamma = s[1]
 		if iscoord(s) and 'X' in s[0]:
-			fcoords_append([s[0],np.array(list(map(float, s[2:5])))])
+			fcoords_append([s[0],np.array(map(float, s[2:5]))])
 
 	pi = np.pi
-	a,b,c,alpha,beta,gamma = list(map(float, (a,b,c,alpha,beta,gamma)))
+	a,b,c,alpha,beta,gamma = map(float, (a,b,c,alpha,beta,gamma))
 	ax = a
 	ay = 0.0
 	az = 0.0
@@ -280,7 +277,7 @@ def calc_edge_len(cifname, direc):
 	by = b * np.sin(gamma * pi / 180.0)
 	bz = 0.0
 	cx = c * np.cos(beta * pi / 180.0)
-	cy = old_div((c * b * np.cos(alpha * pi /180.0) - bx * cx), by)
+	cy = (c * b * np.cos(alpha * pi /180.0) - bx * cx) / by
 	cz = (c ** 2.0 - cx ** 2.0 - cy ** 2.0) ** 0.5
 	unit_cell = np.asarray([[ax,ay,az],[bx,by,bz],[cx,cy,cz]]).T
 
@@ -300,7 +297,7 @@ def cncalc(cifname, direc, cn1):
 
 	with open(path, 'r') as cif:
 		cif = cif.read()
-		cif = [_f for _f in cif.split('\n') if _f]
+		cif = filter(None, cif.split('\n'))
 	
 	cn = 0
 	nc = 0

@@ -1,6 +1,3 @@
-from __future__ import division
-from builtins import map
-from past.utils import old_div
 import numpy as np
 import re
 
@@ -10,7 +7,7 @@ metals = ['Mg', 'Al', 'Ca', 'Ti', 'V' , 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn'
 
 def fix_charges(placed_all):
 	placed_all = np.asarray(placed_all)
-	net_charge = np.sum(list(map(float, placed_all[:,4])))
+	net_charge = np.sum(map(float, placed_all[:,4]))
 	
 	dont_change_charge_atoms = []
 	dont_change_charge_atoms_append = dont_change_charge_atoms.append
@@ -22,7 +19,7 @@ def fix_charges(placed_all):
 			dont_change_charge_atoms_append(l[0])
 
 	num_atoms = float(len(placed_all) - len(dont_change_charge_atoms))
-	rcb = old_div(net_charge,num_atoms)
+	rcb = net_charge/num_atoms
 
 	fc_placed_all = []
 	fc_placed_all_append = fc_placed_all.append
