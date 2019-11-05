@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import itertools
 import numpy as np
@@ -23,15 +24,15 @@ def vertex_assign(TG, TVT, node_cns, unit_cell, cn1, USNA, SYM_TOL, ALL_NODE_COM
 		if not os.path.isfile('vertex_assignment.txt'):
 			for k in node_dict:
 				cn,name = k
-				print ''
-				print '???????????????????????????????????'
-				print 'select building block for:', name , '(CN=' + str(cn) + ')'
+				print('')
+				print('???????????????????????????????????')
+				print('select building block for:', name , '(CN=' + str(cn) + ')')
 				for c in range(len(node_dict[k])):
-					print c, node_dict[k][c]
+					print(c, node_dict[k][c])
 				cif_index = int(raw_input('enter the index of the desired cif: \n'))
 				choice_dict[k] = node_dict[k][cif_index]
-				print '???????????????????????????????????'
-				print ''
+				print('???????????????????????????????????')
+				print('')
 		else:
 			with open('vertex_assignment.txt','r') as va_key:
 				va_key = va_key.read()
@@ -48,9 +49,9 @@ def vertex_assign(TG, TVT, node_cns, unit_cell, cn1, USNA, SYM_TOL, ALL_NODE_COM
 		for k in choice_dict:
 
 			if len(choice_dict[k]) == 0:
-				print 'Error in vertex_edge_assign.py:'
-				print 'Node type', k[0], 'has not assigned cif.'
-				print 'Exiting'
+				print('Error in vertex_edge_assign.py:')
+				print('Node type', k[0], 'has not assigned cif.')
+				print('Exiting')
 				sys.exit()
 
 			for n in TG.nodes(data=True):
@@ -62,10 +63,10 @@ def vertex_assign(TG, TVT, node_cns, unit_cell, cn1, USNA, SYM_TOL, ALL_NODE_COM
 
 	else:
 
-		print '*****************************************************************'
-		print 'RMSD of the compatible node BBs with assigned vertices:          '
-		print '*****************************************************************'
-		print ''
+		print('*****************************************************************')
+		print('RMSD of the compatible node BBs with assigned vertices:          ')
+		print('*****************************************************************')
+		print('')
 		
 		RMSDs = []
 		RMSDs_append = RMSDs.append
@@ -74,7 +75,7 @@ def vertex_assign(TG, TVT, node_cns, unit_cell, cn1, USNA, SYM_TOL, ALL_NODE_COM
 
 		for k in node_dict:
 
-			print 'vertex', k[1], '('+str(k[0]) + ' connected)'
+			print('vertex', k[1], '('+str(k[0]) + ' connected)')
 
 			matched = 0
 			unmatched = 0
@@ -105,14 +106,14 @@ def vertex_assign(TG, TVT, node_cns, unit_cell, cn1, USNA, SYM_TOL, ALL_NODE_COM
 						else:
 							unmatched += 1
 							matches = '(outside tolerance)'
-						print '    ', cif, 'deviation =', np.round(disp,5), matches
+						print('    ', cif, 'deviation =', np.round(disp,5), matches)
 
 					for d in distances:
 						if d[0] < SYM_TOL[coord_num]:
 							sym_assign_append((k[1],d[1]))
 					break
-			print '*', matched, 'compatible building blocks out of', len(node_dict[k]), 'available for node', k[1], '*'
-		print ''
+			print('*', matched, 'compatible building blocks out of', len(node_dict[k]), 'available for node', k[1], '*')
+		print('')
 		
 		rearrange = dict((k[1],[]) for k in TVT)
 		for a in sym_assign:

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import networkx as nx
 import numpy as np
 import re
@@ -79,8 +80,8 @@ def Bstar_alpha(CB, CO, augTG, num_edges):
 			elif (e,s) == positive_direction:
 				direction = -1
 			else:
-				print 'Error in Bstar cycle vector construction, edge direction cannot be defined for:'
-				print s,e
+				print('Error in Bstar cycle vector construction, edge direction cannot be defined for:')
+				print(s,e)
 
 			cycle_vec[ind - 1] = direction
 			net_voltage = net_voltage + (direction * voltage)
@@ -114,8 +115,8 @@ def Bstar_alpha(CB, CO, augTG, num_edges):
 				else:
 					direction = -1
 				if direction != cd:
-					print 'Warning! direction assignment for the co-cycle vector', s,e, 'may be incorrect.'
-					print 'The direction assignment does not follow the low-index to high-index = positive convention'
+					print('Warning! direction assignment for the co-cycle vector', s,e, 'may be incorrect.')
+					print('The direction assignment does not follow the low-index to high-index = positive convention')
 			
 			cocycle_vec[ind - 1] = direction
 
@@ -123,6 +124,6 @@ def Bstar_alpha(CB, CO, augTG, num_edges):
 		a_append(np.array([0,0,0]))
 
 	if len(Bstar) != len(a):
-		print 'Error in cycle_cocycle.py, the row ranks of Bstar and alpha do not match.'
+		print('Error in cycle_cocycle.py, the row ranks of Bstar and alpha do not match.')
 
 	return np.asarray(Bstar), np.asarray(a)

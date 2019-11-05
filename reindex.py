@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import os
 import re
@@ -146,7 +147,7 @@ def reindex(pathfile,charges):
 			else:
 				charge = ''
 
-			print charge
+			print(charge)
 
 			out.write('{:7} {:>4} {:>15} {:>15} {:>15} {:>22} {:>15}'.format(name, elem, "%.10f" % np.round(vec[0],10), "%.10f" % np.round(vec[1],10), "%.10f" % np.round(vec[2],10),'0.00000  Uiso   1.00',charge))
 			out.write('\n')

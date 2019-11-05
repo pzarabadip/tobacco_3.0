@@ -1,3 +1,4 @@
+from __future__ import print_function
 import re
 import sys
 import numpy as np
@@ -284,8 +285,8 @@ def calc_edge_len(cifname, direc):
 	ccoords = [np.dot(unit_cell,vec) for vec in mic_fcoords]
 
 	if len(ccoords) > 2:
-		print 'The edge cif', cifname, 'has to many connection points (Xs)'
-		print 'Exiting'
+		print('The edge cif', cifname, 'has to many connection points (Xs)')
+		print('Exiting')
 		sys.exit()
 
 	return np.linalg.norm(ccoords[0] - ccoords[1])

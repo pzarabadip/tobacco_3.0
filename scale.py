@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 from scipy.optimize import minimize, basinhopping
 import random
@@ -89,8 +90,8 @@ def scale(all_SBU_coords,a,b,c,ang_alpha,ang_beta,ang_gamma,max_le,num_vertices,
 
 	Bstar_inv = np.linalg.inv(Bstar)
 
-	print 'scaling unit cell and vertex positions...'
-	print '' 
+	print('scaling unit cell and vertex positions...')
+	print('') 
 
 	niter = SCALING_ITERATIONS
 	uc_press = 0.0001

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import networkx as nx
 import re
@@ -62,8 +63,8 @@ def omega2coords(augTG, sc_omega_plus, uc_params, num_vertices, template, g, CHE
 			elif (e,s) == positive_direction:
 				direction = -1
 			else:
-				print 'Error in defining an edge traversal in omega_to_coords.py'
-				print 'Exiting'
+				print('Error in defining an edge traversal in omega_to_coords.py')
+				print('Exiting')
 				sys.exit()
 			start = start + direction * sc_omega_plus[ind - 1]
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import glob
 import re
 import numpy as np
@@ -165,7 +166,7 @@ for cif in templates:
 	min_c = min(num_nodes)
 	nsites = len(set(num_nodes))
 
-	print cif.split('.')[0], np.round(avg_diff,5), nsites
+	print(cif.split('.')[0], np.round(avg_diff,5), nsites)
 
 
 	
